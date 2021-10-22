@@ -1,17 +1,35 @@
-import * as React from 'react';
-import { StyleSheet } from 'react-native';
-
-import EditScreenInfo from '../components/EditScreenInfo';
-import { Text, View } from '../components/Themed';
+import React, { useState } from 'react'
+import { StyleSheet, Button } from 'react-native'
+import { Text, View } from '../components/Themed'
 
 export default function TabTwoScreen() {
+  const [count, setCount] = useState<number>(0)
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab Two</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="/screens/TabTwoScreen.tsx" />
+      <Text style={styles.title}>Counter : {count}</Text>
+      <View style={styles.button}>
+        <Button
+          title="Increase"
+          accessibilityLabel="increment"
+          onPress={() => {
+            setCount((prevState) => prevState + 1)
+          }}
+          color="blue"
+        />
+      </View>
+      <View style={styles.button}>
+        <Button
+          title="Decrease"
+          accessibilityLabel="decrease"
+          disabled={count === 0}
+          onPress={() => {
+            setCount((prevState) => (prevState > 0 ? prevState - 1 : prevState))
+          }}
+          color="green"
+        />
+      </View>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -24,9 +42,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
   },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
+  button: {
+    margin: 10,
   },
-});
+})
