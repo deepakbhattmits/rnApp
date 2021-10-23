@@ -14,6 +14,7 @@ import { AntDesign, Ionicons } from '@expo/vector-icons'
 // import EditScreenInfo from '../components/EditScreenInfo'
 import { Text, View } from '../components/Themed'
 import { RootTabScreenProps } from '../types'
+import { PrivateValueStore } from '@react-navigation/core'
 
 export default function TabOneScreen({
   navigation,
@@ -35,7 +36,10 @@ export default function TabOneScreen({
           onPress={() => {
             if (!!text) {
               let id = `${uuid.v4()}`
-              setItems((prevItems) => [...prevItems, { title: text, id, completed:false }])
+              setItems((prevItems) => [
+                ...prevItems,
+                { title: text, id, completed: false },
+              ])
               setText('')
             }
           }}
@@ -48,15 +52,27 @@ export default function TabOneScreen({
         <FlatList
           data={items}
           renderItem={({ item }) => {
-            console.log('item : ', items, selected)
             return (
               <SafeAreaView style={styles.list} key={item.id}>
                 {item.id?.match(/label/i) ? null : (
                   <Pressable
-                    onPress={() =>
-                    {
-                      
-                      console.log('clicked : ', item.id)
+                    onPress={() => {
+                      let updatedValue: {
+                        id: string
+                        title: string
+                        completed: boolean
+                      } = items?.find((el) => el?.id === item?.id)
+                      if (!!updatedValue) {
+                        // updatedValue['completed'] = true
+                        if (item.id === updatedValue?.id) {
+                          setSelected([])
+                        }
+                        // setItems((prevValue) => [...prevValue, updatedValue])
+                      }
+                      // console.log('TEST : ', updatedValue?.completed)
+
+                      setItems((prevValue) => [...prevValue])
+
                       setSelected((prevValue) =>
                         Array.from(new Set([...prevValue, item.id])),
                       )
